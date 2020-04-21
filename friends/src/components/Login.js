@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { axiosWithAuth } from "../auth/auth";
 
 class Login extends React.Component {
   state = {
@@ -30,10 +31,11 @@ class Login extends React.Component {
 
   login = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/api/login", this.state.credentials)
+    axiosWithAuth()
+      .post("/api/login", this.state.credentials)
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        console.log("login", res.data.payload);
+        localStorage.setItem("token", JSON.stringify(res.data.payload));
         this.props.history.push("/FriendsList");
       })
       .catch((err) => console.log(err));
@@ -67,9 +69,10 @@ class Login extends React.Component {
             onChange={this.handleChange}
           />
           <button
-            // onClick={this.fetchData}
-            // disabled={this.state.credentials.isLoading}
-          >log in
+          // onClick={this.fetchData}
+          // disabled={this.state.credentials.isLoading}
+          >
+            log in
             {/* {this.state.credentials.isLoading && <span>Loading...</span>}
             {!this.state.credentials.isLoading && <span>Log in</span>} */}
           </button>

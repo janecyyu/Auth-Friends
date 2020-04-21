@@ -1,9 +1,9 @@
-import React from "react";
-import axios from "axios";
+import React, { use } from "react";
+import { axiosWithAuth } from "../auth/auth";
 
 class FriendList extends React.Component {
   state = {
-    id: "",
+    person: [],
     name: "",
     age: "",
     email: "",
@@ -11,23 +11,74 @@ class FriendList extends React.Component {
   componentDidMount() {
     this.getData();
   }
+  componentDidUpdate() {
+    this.getData();
+  }
+
   getData = () => {
     //request data with the token
     //set the data to state
-    axios
-      .get("http://localhost:5000/api/friends")
+    axiosWithAuth()
+      .get("/api/friends/")
       .then((res) => {
-        //state of hawaii or US and gasoline - regular
-        // this.setState({
-        // });
-        console.log("friend", res);
+        //console.log("friend", res.data);
+        this.setState({
+          person: res.data,
+        });
+        //console.log(this.state.person);
       })
-      .catch((err) => console.log("friend",{ err }));
+      .catch((err) => console.log("friend", { err }));
   };
+  changeName = (e) => {
+    this.setState({
+      name: e.target.value,
+    });
+  };
+  changeAge = (e) => {
+    this.setState({
+      age: e.target.value,
+    });
+  };
+  changeEmail = (e) => {
+    this.setState({
+      email: e.target.value,
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.setState({
+      name: "",
+      age: "",
+      email: "",
+    });
+  };
+
+  addFriend = () => {
+    axiosWithAuth()
+      .post("/api/friends/", {
+        id: 100,
+        name: this.state.name,
+        age: this.state.age,
+        email: this.state.email,
+      })
+      .then(function (response) {
+        console.log(response);
+      });
+  };
+
   render() {
     return (
       <div>
-        <h3>name:{this.state.name}</h3>
+        {this.state.person.map((p) => (
+          <p>{p.name}</p>
+        ))}
+        <from onSubmit={this.handleSubmit}>
+          <input type="text" placeholder="name" value={this.state.name} onChange={this.changeName} />
+          <input type="number" placeholder="age" value={this.state.age} onChange={this.changeAge} />
+          <input type="email" placeholder="email" value={this.state.email} onChange={this.changeEmail} />
+          <button onClick={this.addFriend}>add a friend</button>
+        </from>
       </div>
     );
   }
