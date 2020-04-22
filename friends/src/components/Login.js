@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { axiosWithAuth } from "../auth/auth";
 
 class Login extends React.Component {
@@ -68,7 +67,7 @@ class Login extends React.Component {
             value={this.state.credentials.password}
             onChange={this.handleChange}
           />
-          <button
+          <button className="login"
           // onClick={this.fetchData}
           // disabled={this.state.credentials.isLoading}
           >

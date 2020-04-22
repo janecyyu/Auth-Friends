@@ -7,6 +7,7 @@ class FriendList extends React.Component {
     name: "",
     age: "",
     email: "",
+    id : 7
   };
   componentDidMount() {
     this.getData();
@@ -47,17 +48,12 @@ class FriendList extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      name: "",
-      age: "",
-      email: "",
-    });
   };
 
   addFriend = () => {
     axiosWithAuth()
       .post("/api/friends/", {
-        id: 100,
+        id: this.state.id++,
         name: this.state.name,
         age: this.state.age,
         email: this.state.email,
@@ -74,10 +70,25 @@ class FriendList extends React.Component {
           <p>{p.name}</p>
         ))}
         <from onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="name" value={this.state.name} onChange={this.changeName} />
-          <input type="number" placeholder="age" value={this.state.age} onChange={this.changeAge} />
-          <input type="email" placeholder="email" value={this.state.email} onChange={this.changeEmail} />
-          <button onClick={this.addFriend}>add a friend</button>
+          <input
+            type="text"
+            placeholder="name"
+            value={this.state.name}
+            onChange={this.changeName}
+          />
+          <input
+            type="number"
+            placeholder="age"
+            value={this.state.age}
+            onChange={this.changeAge}
+          />
+          <input
+            type="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.changeEmail}
+          />
+          <button className="add" onClick={this.addFriend}>add a friend</button>
         </from>
       </div>
     );
